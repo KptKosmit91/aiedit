@@ -126,6 +126,7 @@ namespace AIEdit
 				{"BuildingTypes", buildings},
 				{"NoTypes", ToStringList(config["NoTypes"])},
 				{"TargetTypes", ToStringList(config["TargetTypes"])},
+				{"PhobosTargetTypes", ToStringList(config["PhobosTargetTypes"])},
 				{"UnloadTypes", ToStringList(config["UnloadTypes"])},
 				{"MissionTypes", ToStringList(config["MissionTypes"])},
 				{"FacingTypes", ToStringList(config["FacingTypes"])},
