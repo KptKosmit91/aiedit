@@ -140,7 +140,15 @@ namespace AIEdit
 				string[] split = (entry.Value as string).Split(',');
 				string name = split[0];
 				string type = split[1];
+
 				string desc = split[2];
+
+				// KK91: allows usage of commas in ActionType descriptions
+				for(int i = 3; i < split.Length; i++)
+				{
+					desc += "," + split[i];
+				}
+
 				IActionType actionType;
 
 				if (desc.Length == 0) desc = name + ".";
