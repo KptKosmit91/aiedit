@@ -105,6 +105,11 @@ namespace AIEdit
 
 		private IList ToStringList(OrderedDictionary od)
 		{
+			if(od == null)
+			{
+				return new List<IParamListEntry>() { new ParamListEntry("<empty>", 0) };
+            }
+
 			List<IParamListEntry> lst = new List<IParamListEntry>();
 			uint idx = 0;
 			foreach (DictionaryEntry entry in od)
@@ -114,7 +119,7 @@ namespace AIEdit
 			return lst;
 		}
 
-		private List<IActionType> LoadActionTypes(IniDictionary config)
+		private List<IActionType> LoadActionTypes(IniDictionary config, IniDictionary rules, bool isYR)
 		{
 			List<IActionType> actionTypes = new List<IActionType>();
 
@@ -126,7 +131,6 @@ namespace AIEdit
 				{"BuildingTypes", buildings},
 				{"NoTypes", ToStringList(config["NoTypes"])},
 				{"TargetTypes", ToStringList(config["TargetTypes"])},
-				{"PhobosTargetTypes", ToStringList(config["PhobosTargetTypes"])},
 				{"UnloadTypes", ToStringList(config["UnloadTypes"])},
 				{"MissionTypes", ToStringList(config["MissionTypes"])},
 				{"FacingTypes", ToStringList(config["FacingTypes"])},
@@ -134,6 +138,27 @@ namespace AIEdit
 				//{"ScriptTypes", OrderedDictToList<object>(config["ScriptTypes"])},
 				//{"TeamTypes", OrderedDictToList<object>(config["TeamTypes"])},
 			};
+
+			if (isYR)
+			{
+                if (config.TryGetValue("PhobosTargetTypes", out var values))
+                {
+                    typeLists.Add("PhobosTargetTypes", ToStringList(values));
+                }
+                else
+                {
+                    typeLists.Add("PhobosTargetTypes", new List<IParamListEntry>() { new ParamListEntry("<PhobosTargetTypes not defined in yr.ini>", 0) });
+                }
+
+                if (rules.TryGetValue("AITargetTypes", out values))
+				{
+					typeLists.Add("ModderDefinedTargetTypes", ToStringList(values));
+				}
+				else
+				{
+					typeLists.Add("ModderDefinedTargetTypes", new List<IParamListEntry>() { new ParamListEntry("<ModderDefinedTargetTypes not defined in rules>", 0) });
+				}
+			}
 
 			foreach(DictionaryEntry entry in config["ActionTypes"])
 			{
@@ -148,7 +173,22 @@ namespace AIEdit
 				for(int i = 3; i < split.Length; i++)
 				{
 					desc += "," + split[i];
+                }
+
+                desc += $"\nActionType ID: {code}. ";
+
+                if (isYR)
+				{
+					if (code >= 10_000)
+					{
+						desc += "\nRequires Phobos. ";
+					}
+					else if (code >= 65)
+                    {
+                        desc += "\nRequires Ares.";
+                    }
 				}
+
 
 				IActionType actionType;
 
@@ -349,10 +389,19 @@ namespace AIEdit
 			appPath = System.AppDomain.CurrentDomain.BaseDirectory;
 			configPath = appPath + "config\\ts.ini";
 
+			bool isYR = false;
+
 			// autodetect yr
-			if (rules["General"].Contains("DominatorWarhead")) configPath = appPath + "config\\yr.ini";
+			if (rules["General"].Contains("DominatorWarhead"))
+			{
+				isYR = true;
+				configPath = appPath + "config\\yr.ini";
+			}
 			// autodetect ra2
-			else if( rules["General"].Contains("PrismType") ) configPath = appPath + "config\\ra2.ini";
+			else if (rules["General"].Contains("PrismType")) 
+			{ 
+				configPath = appPath + "config\\ra2.ini";
+			}
 
 			config = IniParser.ParseToDictionary(configPath, logger);
 
@@ -409,7 +458,7 @@ namespace AIEdit
 			scriptTypes = new AITable<ScriptType>("ScriptTypes", new List<ScriptType>());
 			teamTypes = new AITable<TeamType>("TeamTypes", new List<TeamType>());
 
-			actionTypes = LoadActionTypes(config);
+			actionTypes = LoadActionTypes(config, rules, isYR);
 			groupTypes = LoadAITypeList(config, "Group");
 			veterancyTypes = LoadAITypeList(config, "VeteranLevels");
 			mindControlTypes = LoadAITypeList(config, "MCDecisions");

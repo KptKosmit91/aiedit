@@ -607,13 +607,14 @@
             // 
             // txtSTActionDesc
             // 
-            this.txtSTActionDesc.Location = new System.Drawing.Point(6, 548);
+            this.txtSTActionDesc.Location = new System.Drawing.Point(6, 532);
             this.txtSTActionDesc.Multiline = true;
             this.txtSTActionDesc.Name = "txtSTActionDesc";
             this.txtSTActionDesc.ReadOnly = true;
-            this.txtSTActionDesc.Size = new System.Drawing.Size(522, 40);
+            this.txtSTActionDesc.Size = new System.Drawing.Size(522, 56);
             this.txtSTActionDesc.TabIndex = 2;
             this.txtSTActionDesc.TabStop = false;
+            this.txtSTActionDesc.TextChanged += new System.EventHandler(this.txtSTActionDesc_TextChanged);
             // 
             // olvSTActions
             // 
@@ -637,7 +638,7 @@
             this.olvSTActions.MultiSelect = false;
             this.olvSTActions.Name = "olvSTActions";
             this.olvSTActions.ShowGroups = false;
-            this.olvSTActions.Size = new System.Drawing.Size(522, 523);
+            this.olvSTActions.Size = new System.Drawing.Size(522, 507);
             this.olvSTActions.TabIndex = 1;
             this.olvSTActions.UseCompatibleStateImageBehavior = false;
             this.olvSTActions.View = System.Windows.Forms.View.Details;
@@ -654,7 +655,7 @@
             this.olvColSTIndex.Sortable = false;
             this.olvColSTIndex.Text = "#";
             this.olvColSTIndex.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.olvColSTIndex.Width = 30;
+            this.olvColSTIndex.Width = 20;
             // 
             // olvColSTAction
             // 
@@ -662,7 +663,7 @@
             this.olvColSTAction.Hideable = false;
             this.olvColSTAction.Sortable = false;
             this.olvColSTAction.Text = "Action";
-            this.olvColSTAction.Width = 180;
+            this.olvColSTAction.Width = 200;
             // 
             // olvColSTParam
             // 
@@ -670,7 +671,7 @@
             this.olvColSTParam.Hideable = false;
             this.olvColSTParam.Sortable = false;
             this.olvColSTParam.Text = "Parameter";
-            this.olvColSTParam.Width = 220;
+            this.olvColSTParam.Width = 210;
             // 
             // olvColSTOffset
             // 
@@ -690,6 +691,7 @@
             this.mnuSTActionDelete});
             this.mnuCtxSTActions.Name = "mnuCtxSTActions";
             this.mnuCtxSTActions.Size = new System.Drawing.Size(108, 98);
+            this.mnuCtxSTActions.Opening += new System.ComponentModel.CancelEventHandler(this.mnuCtxSTActions_Opening);
             // 
             // mnuSTActionUp
             // 

@@ -988,5 +988,15 @@ namespace AIEdit
 		    }
 		    catch (Exception ) {   }
         }
+
+        private void txtSTActionDesc_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuCtxSTActions_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
     }
 }
