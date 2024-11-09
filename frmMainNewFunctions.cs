@@ -141,6 +141,8 @@ namespace AIEdit
 
 			if (isYR)
 			{
+				// KK91: i feel like this part needs a rewrite later. for now it works...
+
                 if (config.TryGetValue("PhobosTargetTypes", out var values))
                 {
                     typeLists.Add("PhobosTargetTypes", ToStringList(values));
@@ -148,6 +150,15 @@ namespace AIEdit
                 else
                 {
                     typeLists.Add("PhobosTargetTypes", new List<IParamListEntry>() { new ParamListEntry("<PhobosTargetTypes not defined in yr.ini>", 0) });
+                }
+
+                if (config.TryGetValue("PhobosMoveActionEndTypes", out values))
+                {
+                    typeLists.Add("PhobosMoveActionEndTypes", ToStringList(values));
+                }
+                else
+                {
+                    typeLists.Add("PhobosMoveActionEndTypes", new List<IParamListEntry>() { new ParamListEntry("<PhobosMoveActionEndTypes not defined in yr.ini>", 0) });
                 }
 
                 if (rules.TryGetValue("AITargetTypes", out values))
@@ -169,7 +180,7 @@ namespace AIEdit
 
 				string desc = split[2];
 
-				// KK91: allows usage of commas in ActionType descriptions
+				// KK91: connect all arguments past the 2nd index into the description, allows usage of commas in ActionType descriptions
 				for(int i = 3; i < split.Length; i++)
 				{
 					desc += "," + split[i];
